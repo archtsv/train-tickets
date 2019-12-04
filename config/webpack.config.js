@@ -669,9 +669,12 @@ module.exports = function(webpackEnv) {
             manifest[file.name] = file.path;
             return manifest;
           }, seed);
-          const entrypointFiles = entrypoints.main.filter(
-            fileName => !fileName.endsWith('.map')
-          );
+          // const entrypointFiles = entrypoints.main.filter(
+          //   fileName => !fileName.endsWith('.map')
+          // );
+          let entrypointFiles = [];
+          Object.keys(entrypoints).forEach(key => entrypointFiles.concat(entrypoints[key]));
+          entrypointFiles = entrypointFiles.filter(fileName => !fileName.endsWith('.map'));
 
           return {
             files: manifestFiles,

@@ -73,7 +73,7 @@ module.exports = {
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appQueryHtml: resolveApp('public/query.html'),
-  appTickeHtml: resolveApp('public/ticket.html'),
+  appTicketHtml: resolveApp('public/ticket.html'),
   appOrderHtml: resolveApp('public/order.html'),
   appIndexJs: resolveModule(resolveApp, 'src/index/index'),
   appQueryJs: resolveModule(resolveApp, 'src/query/index'),
