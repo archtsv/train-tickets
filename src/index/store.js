@@ -8,6 +8,15 @@ import reducers from './reducers';
 
 export default createStore(
   combineReducers(reducers),
-  {}, //state
+  {
+    from: '北京',
+    to: '上海',
+    isCitySelectorVisible: false,
+    currentSelectingLeftCity: false,
+    cityData: null,
+    isLoadingCityData: false,
+    isDateSeletorVisible: false,
+    highSpeed: false,
+  }, //default state
   applyMiddleware(thunk)
 );
