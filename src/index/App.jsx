@@ -1,7 +1,9 @@
 import React, {
   useCallback,
-  Fragment
+  Fragment,
+  useMemo
 } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import './App.css';
 
@@ -10,30 +12,65 @@ import DepartDate from './DepartDate';
 import Journey from './Journey';
 import HighSpeed from './HighSpeed';
 import Submit from './Submit';
+import CitySelector from '../common/CitySelector';
+
+import {
+  exchangeFromTo,
+  showCitySelector
+} from './actions';
 
 function App(props) {
+  const {
+    from,
+    to,
+    isCitySelectorVisible,
+    dispatch
+  } = props;
   const onBack = useCallback(() => {
     window.history.back();
   }, []);
+
+  // const doExchangeFromTo = useCallback(() => {
+  //   dispatch(exchangeFromTo())
+  // },[dispatch]);
+
+  // const doShowCitySelector = useCallback((m) => {
+  //   dispatch(showCitySelector(m))
+  // },[dispatch])
+
+  const cbs = useMemo(() => {
+    return bindActionCreators({
+      exchangeFromTo,
+      showCitySelector
+    }, dispatch)
+  },[dispatch]);
 
   return (
     <Fragment>
       <div className="header-wrapper">
         <Header title="火车票" onBack={onBack}/>
       </div>
-      <DepartDate/>
-      <Journey/>
-      <HighSpeed/>
-      <Submit/>
+      <form className="form">
+        <Journey 
+          from={from} 
+          to={to}
+          {...cbs}
+          // exchangeFromTo={doExchangeFromTo}
+          // showCitySelector={doShowCitySelector}
+        />
+        <DepartDate/>
+        <HighSpeed/>
+        <Submit/>
+      </form>
     </Fragment>
   )
 }
 
 export default connect(
   function mapStateToProps(state) {
-    return {};
+    return state;
   },
   function mapDispatchToProps(dispatch) {
-    return {};
+    return { dispatch };
   }
 )(App);
