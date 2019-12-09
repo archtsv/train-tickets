@@ -16,7 +16,8 @@ import CitySelector from '../common/CitySelector';
 
 import {
   exchangeFromTo,
-  showCitySelector
+  showCitySelector,
+  hideCitySelector
 } from './actions';
 
 function App(props) {
@@ -24,6 +25,8 @@ function App(props) {
     from,
     to,
     isCitySelectorVisible,
+    cityData,
+    isLoadingCityData,
     dispatch
   } = props;
   const onBack = useCallback(() => {
@@ -45,6 +48,12 @@ function App(props) {
     }, dispatch)
   },[dispatch]);
 
+  const citySelectorCbs = useMemo(() => {
+    return bindActionCreators({
+      onBack: hideCitySelector
+    }, dispatch)
+  },[dispatch]);
+
   return (
     <Fragment>
       <div className="header-wrapper">
@@ -62,6 +71,12 @@ function App(props) {
         <HighSpeed/>
         <Submit/>
       </form>
+      <CitySelector 
+        show = {isCitySelectorVisible}
+        cityData={cityData}
+        isLoading={isLoadingCityData}
+        {...citySelectorCbs}
+      />
     </Fragment>
   )
 }
