@@ -17,7 +17,8 @@ import CitySelector from '../common/CitySelector';
 import {
   exchangeFromTo,
   showCitySelector,
-  hideCitySelector
+  hideCitySelector,
+  fetchCityData
 } from './actions';
 
 function App(props) {
@@ -50,7 +51,8 @@ function App(props) {
 
   const citySelectorCbs = useMemo(() => {
     return bindActionCreators({
-      onBack: hideCitySelector
+      onBack: hideCitySelector,
+      fetchCityData
     }, dispatch)
   },[dispatch]);
 
@@ -76,6 +78,7 @@ function App(props) {
         cityData={cityData}
         isLoading={isLoadingCityData}
         {...citySelectorCbs}
+        {...fetchCityData}
       />
     </Fragment>
   )

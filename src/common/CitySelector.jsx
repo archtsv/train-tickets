@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import './CitySelector.css';
 
 export default function CitySelector(props) {
@@ -7,15 +8,27 @@ export default function CitySelector(props) {
     show,
     cityData,
     isLoading,
-    onBack
+    onBack,
+    fetchCityData
   } = props;
 
   const [searchKey, setSearchKey] = useState('');
 
+  const key = useMemo(() => {
+    return searchKey.trim()
+  }, [searchKey]);
+
+  useEffect(() => {
+    if (!show || cityData || isLoading) {
+      return;
+    }
+    fetchCityData();
+  }, [show, cityData, isLoading, fetchCityData]);
+
   return (
     <div className={classnames('city-selector', {hidden: !show})}>
       <div className="city-search">
-        <div className="search-back" onClick={() => onBack}>
+        <div className="search-back" onClick={() => onBack()}>
           <svg
             width="42"
             height="42"
@@ -37,8 +50,15 @@ export default function CitySelector(props) {
             onChange={e => setSearchKey(e.target.value)}
           />
         </div>
-        <i className={classnames("search-clean", {hidden: searchKey.length === 0})} onClick={() => setSearchKey('')}>&#xf063;</i>
+        <i className={classnames("search-clean", {hidden: key.length === 0})} onClick={() => setSearchKey('')}>&#xf063;</i>
       </div>
     </div>
   )
+}
+
+CitySelector.propTypes = {
+    show: PropTypes.bool.isRequired,
+    cityData: PropTypes.object,
+    isLoading: PropTypes.bool.isRequired,
+    onBack: PropTypes.func.isRequired
 }
