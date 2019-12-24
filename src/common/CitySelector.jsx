@@ -146,12 +146,40 @@ const Suggest = memo(function CitySelector(props) {
       .then(data => {
         const {
           result,
-          searchKey,
+          searchKey: sKey,
         } = data;
-
-        setResult(result)
+        
+        if (sKey === searchKey) {
+          setResult(result)
+        }
       });
-  }, [searchKey])
+  }, [searchKey]);
+
+  const fallBackResult = useMemo(() => {
+    if (!result.length) {
+      return [
+        {display: searchKey}
+      ]
+    }
+    return result;
+  }, [result, searchKey]);
+  return (
+    <div className="city-suggest">
+      <ul className="city-suggest-ul">
+        {
+          fallBackResult.map(item => {
+            return (
+              <SuggestItem 
+                key={item.display}
+                name={item.display}
+                onClick={onSelect}
+              />
+            )
+          })
+        }
+      </ul>
+    </div>
+  )
 });
 
 Suggest.propTypes = {
@@ -228,6 +256,14 @@ export default function CitySelector(props) {
         </div>
         <i className={classnames("search-clean", {hidden: key.length === 0})} onClick={() => setSearchKey('')}>&#xf063;</i>
       </div>
+      {
+        Boolean(key) && (
+          <Suggest 
+            searchKey={key}
+            onSelect={key => onSelect(key)}
+          />
+        )
+      }
       {ouputCitySections()}
     </div>
   )
